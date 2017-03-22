@@ -128,6 +128,7 @@ void MainWindow::on_btnTimeSlice_clicked()
 // Move selected process to ready list
 void MainWindow::on_btnMakeReady_clicked()
 {
+    bool added = false;
     // make list of selected items from listview on form: Should only be one, I am not sure how to multi select
     QModelIndexList ListOfItemsOnForm = ui->lstBlocked->selectionModel()->selectedIndexes();
 
@@ -138,8 +139,19 @@ void MainWindow::on_btnMakeReady_clicked()
         {
             if (p.Display() == selectedIndex.data(Qt::DisplayRole).toString())
             {
-                //this is the item, move it to ready
-                _ready.append(p);
+                //this is the item, move it to ready in the right position
+                foreach (ProcessItem q, _ready)
+                {
+                    if (q.UID > p.UID)
+                    {
+                        _ready.insert(_ready.indexOf(q),p);
+                        added = true;
+                    }
+                }
+                if (!added)
+                {
+                    _ready.append(p);
+                }
                 //and remove it from blocked
                 _blocked.removeOne(p);
             }
@@ -165,9 +177,8 @@ void MainWindow::on_btnTerminate_clicked()
 void MainWindow::UpdateReadyList()
 {
     readyProcesses->clear();
-    int priority = 1;
     foreach (ProcessItem p, _ready) {
-        readyProcesses->append(QString::number(priority++) + "\t" + p.Display());
+        readyProcesses->append(p.Display());
     }
     readyProcessesModel->setStringList(*readyProcesses);
 }

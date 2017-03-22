@@ -14,9 +14,10 @@ public:
     int TimeRecieved;
 
     bool operator== (const ProcessItem &p);
+    int UID;
 
 private:
-    int UID;
+
     static int newUID;
 };
 

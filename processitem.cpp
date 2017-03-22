@@ -16,7 +16,7 @@ ProcessItem::ProcessItem(QString _name, int _TimeNeeded)
 
 QString ProcessItem::Display()
 {
-    return this->name + "\t" + QString::number(this->TimeNeeded);
+    return QString::number(this->UID) + "\t" + this->name + "\t" + QString::number(this->TimeNeeded);
 }
 
 bool ProcessItem::operator== (const ProcessItem &p)
